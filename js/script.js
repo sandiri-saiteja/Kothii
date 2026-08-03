@@ -110,7 +110,7 @@ if (searchInput) {
             searchInput.value.toLowerCase();
 
         const cards =
-            document.querySelectorAll(".catalog-grid .card");
+            document.querySelectorAll(".card-item");
 
         cards.forEach(function (card) {
 
@@ -119,7 +119,7 @@ if (searchInput) {
 
             if (text.includes(searchValue)) {
 
-                card.style.display = "block";
+                card.style.display = "";
 
             } else {
 
