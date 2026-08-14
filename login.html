@@ -122,20 +122,35 @@
 
                                 <div class="mb-3">
 
-                                    <label class="form-label">
+    <label for="loginPassword" class="form-label">
+        Password
+    </label>
 
-                                        Password
+    <input
+        type="password"
+        id="loginPassword"
+        class="form-control"
+        placeholder="Enter your password"
+        required>
 
-                                    </label>
+    <div class="form-check mt-2">
 
-                                    <input
-                                        type="password"
-                                        id="loginPassword"
-                                        class="form-control"
-                                        placeholder="Enter your password"
-                                        required>
+        <input
+            class="form-check-input"
+            type="checkbox"
+            id="showLoginPassword">
 
-                                </div>
+        <label
+            class="form-check-label"
+            for="showLoginPassword">
+
+            Show password
+
+        </label>
+
+    </div>
+
+</div>
 
                                 <div class="d-grid">
 
@@ -172,6 +187,64 @@
                                     Register Here
 
                                 </a>
+
+                                <!-- Social Login -->
+
+<div class="text-center mt-4">
+
+    <p class="text-muted mb-3">
+        Or login with
+    </p>
+
+    <div class="d-flex justify-content-center gap-3">
+
+        <!-- Google -->
+        <button
+            type="button"
+            class="social-btn google-btn"
+            title="Login with Google"
+            onclick="socialLogin('Google')">
+
+            <img
+        src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+        alt="Google">
+
+        </button>
+
+        <!-- Facebook -->
+        <button
+    type="button"
+    class="social-btn facebook-btn"
+    title="Login with Facebook"
+    onclick="socialLogin('Facebook')">
+
+    <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="white"
+        aria-hidden="true">
+
+        <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.017 1.792-4.685 4.533-4.685 1.312 0 2.686.235 2.686.235v2.97h-1.514c-1.491 0-1.956.93-1.956 1.887v2.263h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+
+    </svg>
+
+</button>
+
+        <!-- Twitter -->
+        <button
+            type="button"
+            class="social-btn twitter-btn"
+            title="Login with Twitter"
+            onclick="socialLogin('Twitter')">
+
+            𝕏
+
+        </button>
+
+    </div>
+
+</div>
 
                             </div>
 
@@ -217,6 +290,48 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="js/script.js"></script>
+
+    <!-- =====================================================
+     SOCIAL LOGIN POPUP
+===================================================== -->
+
+<div id="socialPopup" class="social-popup">
+
+    <div class="social-popup-box">
+
+        <button
+            type="button"
+            class="popup-close"
+            onclick="closeSocialPopup()">
+
+            &times;
+
+        </button>
+
+        <div class="popup-icon">
+            !
+        </div>
+
+        <h3>
+            NO ACCOUNTS AVAILABLE
+        </h3>
+
+        <p>
+            No account is connected to this login option yet.
+        </p>
+
+        <button
+            type="button"
+            class="popup-ok"
+            onclick="closeSocialPopup()">
+
+            OK
+
+        </button>
+
+    </div>
+
+</div>
 
 </body>
 
