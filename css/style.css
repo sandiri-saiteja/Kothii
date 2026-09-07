@@ -110,6 +110,11 @@ footer p{
     border-radius:30px;
 }
 
+#locationInput::placeholder{
+    color:#6c757d;
+    opacity:0.45;
+}
+
 .weather-card h3{
     color:#198754;
     font-weight:700;
