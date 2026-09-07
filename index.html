@@ -5,413 +5,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Green Campus Sustainability Analytics Portal</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-
-    <!-- Custom CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top shadow">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">🌿 Green Campus</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="catalog.html">Metrics</a></li>
+                <li class="nav-item"><a class="nav-link" href="report.html">Reports</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top shadow">
-
-        <div class="container">
-
-            <a class="navbar-brand fw-bold" href="index.html">
-                🌿 Green Campus
-            </a>
-
-            <button class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav">
-
-                <span class="navbar-toggler-icon"></span>
-
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-
-                <ul class="navbar-nav ms-auto">
-
-                    <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Home</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.html">Register</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.html">Login</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="catalog.html">Metrics</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="report.html">Reports</a>
-                    </li>
-
-                </ul>
-
+<section class="hero d-flex align-items-center">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 text-center text-lg-start">
+                <span class="badge bg-light text-success mb-3 px-3 py-2">ES6 • Bootstrap • Live Weather</span>
+                <h1 class="display-4 fw-bold text-white">Green Campus Sustainability Analytics Portal</h1>
+                <p class="lead text-white mt-4">
+                    Monitor campus sustainability metrics and explore live environmental conditions for any location in the world.
+                </p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start mt-4">
+                    <a href="catalog.html" class="btn btn-success btn-lg">Explore Metrics</a>
+                    <a href="report.html" class="btn btn-light btn-lg">Open Reports & Weather</a>
+                </div>
             </div>
-
-        </div>
-
-    </nav>
-
-    <!-- Hero Section -->
-
-    <section class="hero d-flex align-items-center">
-
-        <div class="container">
-
-            <div class="row align-items-center">
-
-                <!-- Left Side -->
-
-                <div class="col-lg-6 text-center text-lg-start">
-
-                    <h1 class="display-4 fw-bold text-white">
-
-                        Green Campus Sustainability Analytics Portal
-
-                    </h1>
-
-                    <p class="lead text-white mt-4">
-
-                        Monitor energy consumption, renewable resources,
-                        recycling initiatives, water conservation and
-                        environmental sustainability across your campus.
-
-                    </p>
-
-                    <a href="catalog.html" class="btn btn-success btn-lg mt-3">
-
-                        Explore Metrics
-
-                    </a>
-
-                </div>
-
-                <!-- Right Side -->
-
-                <div class="col-lg-6 text-center mt-5 mt-lg-0">
-
-                    <img src="images/campus.webp"
-                         class="img-fluid rounded shadow-lg hero-img"
-                         alt="Green Campus">
-
-                </div>
-
+            <div class="col-lg-6 text-center">
+                <img src="images/campus.webp" class="img-fluid rounded shadow-lg hero-img" alt="Green Campus">
             </div>
-
         </div>
+    </div>
+</section>
 
-    </section>
-
-    <!-- Features -->
-
-    <section class="py-5">
-
-        <div class="container">
-
-            <h2 class="text-center text-success fw-bold mb-5">
-
-                Campus Sustainability Areas
-
-            </h2>
-
-            <div class="row g-4">
-
-                <div class="col-md-6 col-lg-3">
-
-                    <div class="card h-100 shadow border-0">
-
-                        <img src="images/solar.webp"
-                             class="card-img-top"
-                             alt="Solar">
-
-                        <div class="card-body">
-
-                            <h5 class="card-title">
-
-                                ☀ Solar Energy
-
-                            </h5>
-
-                            <p class="card-text">
-
-                                Track renewable energy generation from
-                                campus solar installations.
-
-                            </p>
-
-                        </div>
-
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center text-success fw-bold mb-2">Explore the Portal</h2>
+        <p class="text-center text-muted mb-5">The main analytics areas are available directly from the dashboard.</p>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 shadow border-0 portal-card">
+                    <div class="card-body p-4">
+                        <div class="display-5 mb-3">📊</div>
+                        <h4 class="text-success">Sustainability Metrics</h4>
+                        <p class="text-muted">Browse renewable energy, water conservation, recycling, smart lighting, tree plantation and green-building indicators.</p>
+                        <a href="catalog.html" class="btn btn-outline-success">View Metrics</a>
                     </div>
-
                 </div>
-
-                <div class="col-md-6 col-lg-3">
-
-                    <div class="card h-100 shadow border-0">
-
-                        <img src="images/water.jpeg"
-                             class="card-img-top"
-                             alt="Water">
-
-                        <div class="card-body">
-
-                            <h5 class="card-title">
-
-                                💧 Water Conservation
-
-                            </h5>
-
-                            <p class="card-text">
-
-                                Monitor rainwater harvesting and water
-                                conservation efforts.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-
-                    <div class="card h-100 shadow border-0">
-
-                        <img src="images/recycling.webp"
-                             class="card-img-top"
-                             alt="Recycling">
-
-                        <div class="card-body">
-
-                            <h5 class="card-title">
-
-                                ♻ Waste Management
-
-                            </h5>
-
-                            <p class="card-text">
-
-                                Track recycling performance and waste
-                                reduction initiatives.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-
-                    <div class="card h-100 shadow border-0">
-
-                        <img src="images/trees.webp"
-                             class="card-img-top"
-                             alt="Trees">
-
-                        <div class="card-body">
-
-                            <h5 class="card-title">
-
-                                🌳 Green Campus
-
-                            </h5>
-
-                            <p class="card-text">
-
-                                Monitor biodiversity, plantation drives
-                                and campus greenery.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
             </div>
-
-        </div>
-
-    </section>
-
-    <!-- Statistics -->
-
-    <section class="bg-light py-5">
-
-        <div class="container">
-
-            <h2 class="text-center text-success fw-bold mb-5">
-
-                Campus Highlights
-
-            </h2>
-
-            <div class="row g-4">
-
-                <div class="col-md-6 col-lg-3">
-
-                    <div class="card text-center shadow">
-
-                        <div class="card-body">
-
-                            <h3>82%</h3>
-
-                            <p>Renewable Energy</p>
-
-                            <div class="progress">
-
-                                <div class="progress-bar bg-success"
-                                     style="width:82%;">
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
+            <div class="col-md-6">
+                <div class="card h-100 shadow border-0 portal-card">
+                    <div class="card-body p-4">
+                        <div class="display-5 mb-3">🌍</div>
+                        <h4 class="text-success">Global Weather & Reports</h4>
+                        <p class="text-muted">Search a city, country, postal location, or coordinates and compare live weather conditions with campus sustainability performance.</p>
+                        <a href="report.html" class="btn btn-outline-success">Open Analytics</a>
                     </div>
-
                 </div>
-
-                <div class="col-md-6 col-lg-3">
-
-                    <div class="card text-center shadow">
-
-                        <div class="card-body">
-
-                            <h3>65%</h3>
-
-                            <p>Water Saved</p>
-
-                            <div class="progress">
-
-                                <div class="progress-bar bg-info"
-                                     style="width:65%;">
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-
-                    <div class="card text-center shadow">
-
-                        <div class="card-body">
-
-                            <h3>74%</h3>
-
-                            <p>Waste Recycled</p>
-
-                            <div class="progress">
-
-                                <div class="progress-bar bg-warning"
-                                     style="width:74%;">
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-
-                    <div class="card text-center shadow">
-
-                        <div class="card-body">
-
-                            <h3>1500+</h3>
-
-                            <p>Trees Planted</p>
-
-                            <div class="progress">
-
-                                <div class="progress-bar bg-success"
-                                     style="width:90%;">
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
             </div>
-
         </div>
+    </div>
+</section>
 
-    </section>
-
-    <!-- Footer -->
-
-    <footer class="bg-success text-white text-center py-4">
-
-        <div class="container">
-
-            <h4>Green Campus Sustainability Analytics Portal</h4>
-
-            <p>
-
-                Building a Cleaner, Smarter and Greener Future.
-
-            </p>
-
-            <p>
-
-                Email: support@greencampus.edu |
-                Phone: +91 123XXX7890
-
-            </p>
-
-            <p class="mb-0">
-
-                © 2026 Green Campus Sustainability Analytics Portal
-
-            </p>
-
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center text-success fw-bold mb-5">Campus Sustainability Areas</h2>
+        <div class="row g-4 css-grid-areas">
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow border-0">
+                    <img src="images/solar.webp" class="card-img-top" alt="Solar Energy">
+                    <div class="card-body"><h5 class="card-title">☀ Solar Energy</h5><p class="card-text">Track renewable energy generation from campus solar installations.</p></div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow border-0">
+                    <img src="images/water.jpeg" class="card-img-top" alt="Water Conservation">
+                    <div class="card-body"><h5 class="card-title">💧 Water Conservation</h5><p class="card-text">Monitor rainwater harvesting and water-saving initiatives.</p></div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow border-0">
+                    <img src="images/recycling.webp" class="card-img-top" alt="Recycling">
+                    <div class="card-body"><h5 class="card-title">♻ Waste Management</h5><p class="card-text">Track recycling performance and waste reduction programs.</p></div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow border-0">
+                    <img src="images/trees.webp" class="card-img-top" alt="Trees">
+                    <div class="card-body"><h5 class="card-title">🌳 Green Campus</h5><p class="card-text">Monitor plantation drives, biodiversity and campus greenery.</p></div>
+                </div>
+            </div>
         </div>
+    </div>
+</section>
 
-    </footer>
+<section class="bg-light pb-5">
+    <div class="container">
+        <h2 class="text-center text-success fw-bold mb-5">Campus Highlights</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3"><div class="card text-center shadow h-100"><div class="card-body"><h3>82%</h3><p>Renewable Energy</p><div class="progress"><div class="progress-bar bg-success" style="width:82%"></div></div></div></div></div>
+            <div class="col-md-6 col-lg-3"><div class="card text-center shadow h-100"><div class="card-body"><h3>65%</h3><p>Water Saved</p><div class="progress"><div class="progress-bar bg-info" style="width:65%"></div></div></div></div></div>
+            <div class="col-md-6 col-lg-3"><div class="card text-center shadow h-100"><div class="card-body"><h3>74%</h3><p>Waste Recycled</p><div class="progress"><div class="progress-bar bg-warning" style="width:74%"></div></div></div></div></div>
+            <div class="col-md-6 col-lg-3"><div class="card text-center shadow h-100"><div class="card-body"><h3>1500+</h3><p>Trees Planted</p><div class="progress"><div class="progress-bar bg-success" style="width:90%"></div></div></div></div></div>
+        </div>
+    </div>
+</section>
 
-    <!-- Bootstrap JS -->
+<footer class="bg-success text-white text-center py-4">
+    <div class="container">
+        <h4>Green Campus Sustainability Analytics Portal</h4>
+        <p>Building a Cleaner, Smarter and Greener Future.</p>
+        <p>Email: support@greencampus.edu | Phone: +91 123XXX7890</p>
+        <p class="mb-0">© 2026 Green Campus Sustainability Analytics Portal</p>
+    </div>
+</footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="js/script.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/script.js"></script>
 </body>
-
 </html>
