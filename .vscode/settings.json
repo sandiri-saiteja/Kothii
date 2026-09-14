@@ -1,0 +1,8 @@
+{
+    "xml.fileAssociations": [
+        {
+            "pattern": "xml/green-campus.xml",
+            "systemId": "xml/green-campus.xsd"
+        }
+    ]
+}

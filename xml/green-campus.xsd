@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!-- =====================================================
+         ROOT ELEMENT
+         ===================================================== -->
+
+    <xs:element name="greenCampus">
+
+        <xs:complexType>
+
+            <xs:sequence>
+
+                <xs:element name="resources">
+                    <xs:complexType>
+
+                        <xs:sequence>
+
+                            <xs:element
+                                name="resource"
+                                maxOccurs="unbounded">
+
+                                <xs:complexType>
+
+                                    <xs:sequence>
+
+                                        <xs:element
+                                            name="resourceId"
+                                            type="xs:positiveInteger"/>
+
+                                        <xs:element
+                                            name="resourceName"
+                                            type="xs:string"/>
+
+                                        <xs:element
+                                            name="resourceType"
+                                            type="xs:string"/>
+
+                                        <xs:element
+                                            name="unit"
+                                            type="xs:string"/>
+
+                                        <xs:element
+                                            name="description"
+                                            type="xs:string"/>
+
+                                    </xs:sequence>
+
+                                </xs:complexType>
+
+                            </xs:element>
+
+                        </xs:sequence>
+
+                    </xs:complexType>
+                </xs:element>
+
+
+                <!-- =================================================
+                     CONSUMPTION RECORDS
+                     ================================================= -->
+
+                <xs:element name="consumptionRecords">
+
+                    <xs:complexType>
+
+                        <xs:sequence>
+
+                            <xs:element
+                                name="consumptionRecord"
+                                maxOccurs="unbounded">
+
+                                <xs:complexType>
+
+                                    <xs:sequence>
+
+                                        <xs:element
+                                            name="recordId"
+                                            type="xs:positiveInteger"/>
+
+                                        <xs:element
+                                            name="resourceId"
+                                            type="xs:positiveInteger"/>
+
+                                        <xs:element
+                                            name="consumptionValue"
+                                            type="xs:decimal"/>
+
+                                        <xs:element
+                                            name="consumptionDate"
+                                            type="xs:date"/>
+
+                                        <xs:element
+                                            name="campusLocation"
+                                            type="xs:string"/>
+
+                                    </xs:sequence>
+
+                                </xs:complexType>
+
+                            </xs:element>
+
+                        </xs:sequence>
+
+                    </xs:complexType>
+
+                </xs:element>
+
+
+                <!-- =================================================
+                     SUSTAINABILITY METRICS
+                     ================================================= -->
+
+                <xs:element name="sustainabilityMetrics">
+
+                    <xs:complexType>
+
+                        <xs:sequence>
+
+                            <xs:element
+                                name="sustainabilityMetric"
+                                maxOccurs="unbounded">
+
+                                <xs:complexType>
+
+                                    <xs:sequence>
+
+                                        <xs:element
+                                            name="metricId"
+                                            type="xs:positiveInteger"/>
+
+                                        <xs:element
+                                            name="metricName"
+                                            type="xs:string"/>
+
+                                        <xs:element
+                                            name="metricValue"
+                                            type="xs:decimal"/>
+
+                                        <xs:element
+                                            name="unit"
+                                            type="xs:string"/>
+
+                                        <xs:element
+                                            name="metricDate"
+                                            type="xs:date"/>
+
+                                        <xs:element
+                                            name="description"
+                                            type="xs:string"/>
+
+                                    </xs:sequence>
+
+                                </xs:complexType>
+
+                            </xs:element>
+
+                        </xs:sequence>
+
+                    </xs:complexType>
+
+                </xs:element>
+
+            </xs:sequence>
+
+        </xs:complexType>
+
+    </xs:element>
+
+</xs:schema>

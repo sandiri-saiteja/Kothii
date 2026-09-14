@@ -1,0 +1,72 @@
+<!-- =========================================================
+     GREEN CAMPUS SUSTAINABILITY ANALYTICS PORTAL
+     DTD VALIDATION
+     ========================================================= -->
+
+<!ELEMENT greenCampus (
+    resources,
+    consumptionRecords,
+    sustainabilityMetrics
+)>
+
+
+<!-- =========================================================
+     RESOURCES
+     ========================================================= -->
+
+<!ELEMENT resources (resource+)>
+
+<!ELEMENT resource (
+    resourceId,
+    resourceName,
+    resourceType,
+    unit,
+    description
+)>
+
+<!ELEMENT resourceId (#PCDATA)>
+<!ELEMENT resourceName (#PCDATA)>
+<!ELEMENT resourceType (#PCDATA)>
+<!ELEMENT unit (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+
+
+<!-- =========================================================
+     CONSUMPTION RECORDS
+     ========================================================= -->
+
+<!ELEMENT consumptionRecords (consumptionRecord+)>
+
+<!ELEMENT consumptionRecord (
+    recordId,
+    resourceId,
+    consumptionValue,
+    consumptionDate,
+    campusLocation
+)>
+
+<!ELEMENT recordId (#PCDATA)>
+<!ELEMENT consumptionValue (#PCDATA)>
+<!ELEMENT consumptionDate (#PCDATA)>
+<!ELEMENT campusLocation (#PCDATA)>
+
+
+<!-- =========================================================
+     SUSTAINABILITY METRICS
+     ========================================================= -->
+
+<!ELEMENT sustainabilityMetrics (sustainabilityMetric+)>
+
+<!ELEMENT sustainabilityMetric (
+    metricId,
+    metricName,
+    metricValue,
+    unit,
+    metricDate,
+    description
+)>
+
+<!ELEMENT metricId (#PCDATA)>
+<!ELEMENT metricName (#PCDATA)>
+<!ELEMENT metricValue (#PCDATA)>
+<!ELEMENT metricDate (#PCDATA)>
