@@ -15,3 +15,37 @@ Use VS Code Live Server or host the folder on GitHub Pages. Do not rely on openi
 
 ## API
 Open-Meteo Geocoding and Forecast APIs are used. No API key is required for the public/free use described by the provider.
+
+## MySQL Database Integration (Added Without Removing Previous Stages)
+
+The project now includes a `database/green_campus.sql` recreation script and a small Java HTTP API.
+
+### Database tables
+
+- `users` — web registration/login accounts
+- `resources` — existing Java CRUD resources
+- `consumption_records` — existing Java CRUD consumption records
+- `sustainability_metrics` — existing Java CRUD sustainability metrics
+- `sustainability_reports` — web sustainability report submissions linked to registered users
+
+### Run the API
+
+From `Kothii/java` in PowerShell:
+
+```powershell
+$env:GREEN_CAMPUS_DB_PASSWORD="YOUR_MYSQL_PASSWORD"
+mvn clean compile
+mvn exec:java "-Dexec.mainClass=com.greencampus.ApiServer"
+```
+
+Keep the API terminal open and run the website with Live Server as before.
+
+### Data flow
+
+`Register page → Java API → MySQL users table`
+
+`Login page → Java API → MySQL users table`
+
+`Report page → Java API → MySQL sustainability_reports table`
+
+The previous Java console CRUD stage continues to use `resources`, `consumption_records`, and `sustainability_metrics` unchanged.

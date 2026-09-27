@@ -16,7 +16,7 @@
 
     <properties>
 
-        <maven.compiler.release>25</maven.compiler.release>
+        <maven.compiler.release>26</maven.compiler.release>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -41,12 +41,25 @@
         <plugins>
 
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+            </plugin>
+
+            <plugin>
 
                 <groupId>org.apache.maven.plugins</groupId>
 
                 <artifactId>maven-compiler-plugin</artifactId>
 
                 <version>3.14.1</version>
+
+                <configuration>
+                    <compilerArgs>
+                        <arg>--add-modules</arg>
+                        <arg>jdk.httpserver</arg>
+                    </compilerArgs>
+                </configuration>
 
             </plugin>
 

@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (registerForm) {
 
-        registerForm.addEventListener("submit", function (event) {
+        registerForm.addEventListener("submit", async function (event) {
 
             event.preventDefault();
 
@@ -339,11 +339,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (isFormValid) {
 
-                /*
-                   Save registration data locally for this
-                   client-side demonstration.
-                */
-
                 const user = {
 
                     name: name.value.trim(),
@@ -367,19 +362,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 };
 
 
-                localStorage.setItem(
-                    "greenCampusUser",
-                    JSON.stringify(user)
-                );
+                /* Save the account in MySQL through the Java API. */
 
+                try {
 
-                alert(
-                    "Registration successful!"
-                );
+                    const result = await GreenCampusAPI.register(user);
 
+                    /*
+                       Store only the safe profile locally so pages can
+                       identify the currently logged-in user. The password
+                       is NOT stored in localStorage.
+                    */
 
-                window.location.href =
-                    "login.html";
+                    localStorage.setItem(
+                        "greenCampusUser",
+                        JSON.stringify(result.user)
+                    );
+
+                    alert(result.message);
+
+                    window.location.href =
+                        "login.html";
+
+                } catch (error) {
+
+                    showError(
+                        email,
+                        error.message ||
+                        "Registration failed. Make sure the Java API is running."
+                    );
+                }
             }
 
         });
@@ -424,7 +436,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (loginForm) {
 
-        loginForm.addEventListener("submit", function (event) {
+        loginForm.addEventListener("submit", async function (event) {
 
             event.preventDefault();
 
@@ -488,70 +500,40 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            /* Check registered user */
+            /* Check the account in MySQL through the Java API. */
 
-            const storedUser =
-                localStorage.getItem("greenCampusUser");
+            try {
 
+                const result = await GreenCampusAPI.login({
+                    email: loginEmail.value.trim(),
+                    password: loginPassword.value
+                });
 
-            if (!storedUser) {
+                /* Store only the safe user profile locally. */
 
-                showError(
-                    loginEmail,
-                    "No registered account found. Please register first."
+                localStorage.setItem(
+                    "greenCampusUser",
+                    JSON.stringify(result.user)
                 );
 
-                return;
-            }
-
-
-            const user =
-                JSON.parse(storedUser);
-
-
-            if (
-                loginEmail.value.trim().toLowerCase()
-                !== user.email.toLowerCase()
-            ) {
-
-                showError(
-                    loginEmail,
-                    "Email does not match the registered account."
+                localStorage.setItem(
+                    "loggedIn",
+                    "true"
                 );
 
-                return;
-            }
+                alert(result.message);
 
+                window.location.href =
+                    "catalog.html";
 
-            if (
-                loginPassword.value
-                !== user.password
-            ) {
+            } catch (error) {
 
                 showError(
                     loginPassword,
-                    "Incorrect password."
+                    error.message ||
+                    "Login failed. Make sure the Java API is running."
                 );
-
-                return;
             }
-
-
-            /* Login successful */
-
-            localStorage.setItem(
-                "loggedIn",
-                "true"
-            );
-
-
-            alert(
-                "Login successful!"
-            );
-
-
-            window.location.href =
-                "catalog.html";
 
         });
 
@@ -798,7 +780,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         reportForm.addEventListener(
             "submit",
-            function (event) {
+            async function (event) {
 
                 event.preventDefault();
 
@@ -977,12 +959,42 @@ if (reportAgreement) {
 
                 if (isFormValid) {
 
-                    alert(
-                        "Report submitted successfully!"
-                    );
+                    const storedUser =
+                        localStorage.getItem("greenCampusUser");
 
-                    reportForm.reset();
+                    if (!storedUser) {
 
+                        alert(
+                            "Please login before submitting a sustainability report."
+                        );
+
+                        window.location.href = "login.html";
+                        return;
+                    }
+
+                    const user = JSON.parse(storedUser);
+
+                    try {
+
+                        const result = await GreenCampusAPI.submitReport({
+                            email: user.email,
+                            metric: metric.options[metric.selectedIndex].text.trim(),
+                            value: value.value,
+                            date: reportDate.value,
+                            description: reportDescription.value.trim()
+                        });
+
+                        alert(result.message);
+
+                        reportForm.reset();
+
+                    } catch (error) {
+
+                        alert(
+                            error.message ||
+                            "Report submission failed. Make sure the Java API is running."
+                        );
+                    }
                 }
 
             }

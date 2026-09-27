@@ -13,10 +13,44 @@ public class DBConnection {
             "root";
 
     private static final String PASSWORD =
-            "1985@saiteja";
+            getPassword();
+
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new ExceptionInInitializerError(
+                    "MySQL JDBC Driver not found. "
+                    + "Make sure mysql-connector-j is present in Maven dependencies."
+            );
+        }
+    }
 
     private DBConnection() {
-        // Prevent creating objects of this utility class
+        // Prevent object creation
+    }
+
+    private static String getPassword() {
+
+        String property =
+                System.getProperty("green.campus.db.password");
+
+        if (property != null && !property.isBlank()) {
+            return property;
+        }
+
+        String environment =
+                System.getenv("GREEN_CAMPUS_DB_PASSWORD");
+
+        if (environment != null && !environment.isBlank()) {
+            return environment;
+        }
+
+        throw new IllegalStateException(
+                "MySQL password not configured. "
+                + "Set GREEN_CAMPUS_DB_PASSWORD "
+                + "or -Dgreen.campus.db.password."
+        );
     }
 
     public static Connection getConnection()

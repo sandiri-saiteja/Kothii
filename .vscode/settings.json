@@ -4,5 +4,6 @@
             "pattern": "xml/green-campus.xml",
             "systemId": "xml/green-campus.xsd"
         }
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
