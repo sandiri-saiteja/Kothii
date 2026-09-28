@@ -1,26 +1,23 @@
 package com.greencampus;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Locale;
 
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 /**
- * Servlet-based controller for the Green Campus Sustainability Analytics Portal.
+ * Servlet-based controller for the Green Campus Sustainability Analytics
+ * Portal.
  *
- * Base URL:
- *   /api/resources
- *   /api/consumption-records
- *   /api/sustainability-metrics
+ * Base URL: /api/resources /api/consumption-records /api/sustainability-metrics
  *
  * The servlet keeps HTTP routing/controller responsibilities separate from the
  * existing DAO implementation used by the standalone Java CRUD experiment.
@@ -32,8 +29,10 @@ import java.util.Locale;
 )
 public class GreenCampusControllerServlet extends HttpServlet {
 
-    private final GreenCampusServletService service =
-            new GreenCampusServletService();
+    private final GreenCampusServletService service
+            = new GreenCampusServletService();
+    private final UserDAO userDAO = new UserDAO();
+    private final ReportDAO reportDAO = new ReportDAO();
 
     @Override
     protected void doOptions(
@@ -132,6 +131,21 @@ public class GreenCampusControllerServlet extends HttpServlet {
             String[] path = pathParts(request);
             FormData form = new FormData(request);
 
+            if (path.length == 1 && "register".equals(path[0])) {
+                registerUser(form, response);
+                return;
+            }
+
+            if (path.length == 1 && "login".equals(path[0])) {
+                loginUser(form, response);
+                return;
+            }
+
+            if (path.length == 1 && "report".equals(path[0])) {
+                saveReport(form, response);
+                return;
+            }
+
             if (path.length == 1 && "resources".equals(path[0])) {
                 Resource resource = resourceFromForm(form);
                 Resource created = service.createResource(resource);
@@ -166,6 +180,165 @@ public class GreenCampusControllerServlet extends HttpServlet {
             serverError(response, e);
         }
     }
+
+    private void registerUser(
+        FormData form,
+        HttpServletResponse response) throws IOException {
+
+    try {
+        String name = form.required("name");
+        String userCode = form.required("id");
+        String email = form.required("email").toLowerCase();
+        String department = form.required("department");
+        String campus = form.required("campus");
+        String password = form.required("password");
+
+        if (userDAO.emailExists(email)) {
+            sendError(response,
+                    HttpServletResponse.SC_CONFLICT,
+                    "An account with this email already exists.");
+            return;
+        }
+
+        if (userDAO.userCodeExists(userCode)) {
+            sendError(response,
+                    HttpServletResponse.SC_CONFLICT,
+                    "This Student / Employee ID is already registered.");
+            return;
+        }
+
+        User user = new User(
+                name,
+                userCode,
+                email,
+                department,
+                campus,
+                SecurityUtil.sha256(password)
+        );
+
+        userDAO.createUser(user);
+
+        String json =
+                "{\"success\":true"
+                + ",\"message\":" + quote(
+                        "Registration saved in MySQL successfully.")
+                + ",\"user\":{"
+                + "\"userId\":" + user.getUserId()
+                + ",\"name\":" + quote(user.getFullName())
+                + ",\"id\":" + quote(user.getUserCode())
+                + ",\"email\":" + quote(user.getEmail())
+                + ",\"department\":" + quote(user.getDepartment())
+                + ",\"campus\":" + quote(user.getCampus())
+                + "}}";
+
+        sendJson(response, HttpServletResponse.SC_CREATED, json);
+
+    } catch (IllegalArgumentException e) {
+        sendError(response,
+                HttpServletResponse.SC_BAD_REQUEST,
+                e.getMessage());
+
+    } catch (SQLException e) {
+        serverError(response, e);
+    }
+}
+
+private void loginUser(
+        FormData form,
+        HttpServletResponse response) throws IOException {
+
+    try {
+        String email = form.required("email").toLowerCase();
+        String password = form.required("password");
+
+        User user = userDAO.findByEmail(email);
+
+        if (user == null ||
+                !SecurityUtil.sha256(password)
+                        .equals(user.getPasswordHash())) {
+
+            sendError(response,
+                    HttpServletResponse.SC_UNAUTHORIZED,
+                    "Invalid email or password.");
+            return;
+        }
+
+        String json =
+                "{\"success\":true"
+                + ",\"message\":" + quote("Login successful.")
+                + ",\"user\":{"
+                + "\"userId\":" + user.getUserId()
+                + ",\"name\":" + quote(user.getFullName())
+                + ",\"id\":" + quote(user.getUserCode())
+                + ",\"email\":" + quote(user.getEmail())
+                + ",\"department\":" + quote(user.getDepartment())
+                + ",\"campus\":" + quote(user.getCampus())
+                + "}}";
+
+        sendJson(response, HttpServletResponse.SC_OK, json);
+
+    } catch (IllegalArgumentException e) {
+        sendError(response,
+                HttpServletResponse.SC_BAD_REQUEST,
+                e.getMessage());
+
+    } catch (SQLException e) {
+        serverError(response, e);
+    }
+}
+
+private void saveReport(
+        FormData form,
+        HttpServletResponse response) throws IOException {
+
+    try {
+        String email = form.required("email").toLowerCase();
+        String metric = form.required("metric");
+        double value = form.doubleValue("value");
+
+        LocalDate date = GreenCampusServletService.parseDate(
+                form.required("date"),
+                "date"
+        );
+
+        String description = form.required("description");
+
+        GreenCampusServletService.requirePositive(
+                value,
+                "value"
+        );
+
+        int reportId = reportDAO.createReport(
+                email,
+                metric,
+                value,
+                date,
+                description
+        );
+
+        String json =
+                "{\"success\":true"
+                + ",\"message\":" + quote(
+                        "Report saved in MySQL successfully.")
+                + ",\"reportId\":" + reportId
+                + "}";
+
+        sendJson(response, HttpServletResponse.SC_CREATED, json);
+
+    } catch (NumberFormatException | DateTimeParseException e) {
+        sendError(response,
+                HttpServletResponse.SC_BAD_REQUEST,
+                "Invalid report value or date.");
+
+    } catch (IllegalArgumentException e) {
+        sendError(response,
+                HttpServletResponse.SC_BAD_REQUEST,
+                e.getMessage());
+
+    } catch (SQLException e) {
+        serverError(response, e);
+    }
+}
 
     @Override
     protected void doPut(
@@ -295,7 +468,7 @@ public class GreenCampusControllerServlet extends HttpServlet {
         } catch (SQLException e) {
             serverError(response, e);
         }
-    }
+            }
 
     private Resource resourceFromForm(FormData form) {
         String name = form.required("resourceName");
@@ -409,7 +582,9 @@ public class GreenCampusControllerServlet extends HttpServlet {
     private String resourcesJson(List<Resource> resources) {
         StringBuilder json = new StringBuilder("[");
         for (int i = 0; i < resources.size(); i++) {
-            if (i > 0) json.append(',');
+            if (i > 0) {
+                json.append(',');
+            }
             json.append(resourceJson(resources.get(i)));
         }
         return json.append(']').toString();
@@ -428,7 +603,9 @@ public class GreenCampusControllerServlet extends HttpServlet {
     private String consumptionJson(List<ConsumptionRecord> records) {
         StringBuilder json = new StringBuilder("[");
         for (int i = 0; i < records.size(); i++) {
-            if (i > 0) json.append(',');
+            if (i > 0) {
+                json.append(',');
+            }
             json.append(consumptionRecordJson(records.get(i)));
         }
         return json.append(']').toString();
@@ -447,7 +624,9 @@ public class GreenCampusControllerServlet extends HttpServlet {
     private String metricsJson(List<SustainabilityMetric> metrics) {
         StringBuilder json = new StringBuilder("[");
         for (int i = 0; i < metrics.size(); i++) {
-            if (i > 0) json.append(',');
+            if (i > 0) {
+                json.append(',');
+            }
             json.append(metricJson(metrics.get(i)));
         }
         return json.append(']').toString();
@@ -476,22 +655,25 @@ public class GreenCampusControllerServlet extends HttpServlet {
         String text = String.valueOf(value);
         return "\""
                 + text.replace("\\", "\\\\")
-                .replace("\"", "\\\"")
-                .replace("\r", "\\r")
-                .replace("\n", "\\n")
-                .replace("\t", "\\t")
+                        .replace("\"", "\\\"")
+                        .replace("\r", "\\r")
+                        .replace("\n", "\\n")
+                        .replace("\t", "\\t")
                 + "\"";
     }
 
-    /** Small form-url-encoded parser shared by POST and PUT. */
+    /**
+     * Small form-url-encoded parser shared by POST and PUT.
+     */
     private static final class FormData {
+
         private final java.util.Map<String, String> values = new java.util.HashMap<>();
 
         FormData(HttpServletRequest request) throws IOException {
             String contentType = request.getContentType();
 
-            if (contentType == null ||
-                    !contentType.toLowerCase(Locale.ROOT)
+            if (contentType == null
+                    || !contentType.toLowerCase(Locale.ROOT)
                             .startsWith("application/x-www-form-urlencoded")) {
                 throw new IllegalArgumentException(
                         "Use application/x-www-form-urlencoded request data."
