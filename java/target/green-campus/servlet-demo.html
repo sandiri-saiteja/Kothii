@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Campus • Servlet Controller Demo</title>
+    <style>
+        :root{--green:#1e6b4b;--light:#f4f8f2;--gold:#b8860b;--ink:#243128;--line:#dbe6dd;--danger:#a33a32}
+        *{box-sizing:border-box}
+        body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#fbfdf9;color:var(--ink)}
+        .wrap{max-width:1250px;margin:auto;padding:28px 18px 50px}
+        h1{margin:0 0 6px;font-size:clamp(28px,4vw,44px)}
+        .subtitle{margin:0 0 25px;color:#59705f}
+        .banner{background:linear-gradient(135deg,#eef7ed,#fff7df);border:1px solid #d9e7d9;border-radius:18px;padding:18px 20px;margin-bottom:20px}
+        .status{font-weight:700}.ok{color:var(--green)}.bad{color:var(--danger)}
+        .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+        .card{background:white;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 26px rgba(45,78,55,.06)}
+        .card h2{margin:0 0 14px;font-size:21px}
+        .endpoint{font-size:12px;color:#6c7b70;margin-bottom:12px;word-break:break-all}
+        label{display:block;font-size:12px;font-weight:700;margin:10px 0 5px}
+        input{width:100%;padding:10px;border:1px solid #cbd8cc;border-radius:10px;font:inherit}
+        .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+        button{border:0;border-radius:10px;padding:10px 13px;background:var(--green);color:white;font-weight:700;cursor:pointer;margin:5px 5px 0 0}
+        button.secondary{background:#dce9df;color:#234a34}.danger{background:var(--danger)}
+        pre{background:#18231c;color:#edf7ef;border-radius:12px;padding:12px;overflow:auto;max-height:260px;font-size:12px}
+        .table-wrap{overflow:auto;margin-top:18px}.table-wrap table{border-collapse:collapse;width:100%;background:white}
+        th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;white-space:nowrap}
+        th{background:#eef5ed}.hint{font-size:12px;color:#6a756c}
+        @media(max-width:1000px){.grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h1>Green Campus Servlet Controller</h1>
+    <p class="subtitle">A dedicated CRUD controller for resources, consumption records and sustainability metrics.</p>
+
+    <div class="banner">
+        <div>Servlet health: <span id="status" class="status">Checking...</span></div>
+        <div class="hint">This page is served by Tomcat and calls the new <code>/api/*</code> servlet controller.</div>
+    </div>
+
+    <div class="grid">
+        <section class="card">
+            <h2>Resources</h2>
+            <div class="endpoint">GET/POST/PUT/DELETE /api/resources</div>
+            <form id="resourceForm">
+                <label>Name</label><input id="resourceName" required>
+                <label>Type</label><input id="resourceType" required value="Renewable Energy">
+                <label>Unit</label><input id="resourceUnit" required value="kWh">
+                <label>Description</label><input id="resourceDescription">
+                <div class="row">
+                    <div><label>Update/Delete ID</label><input id="resourceId" type="number" min="1"></div>
+                    <div style="align-self:end">
+                        <button type="submit">Create</button>
+                        <button type="button" class="secondary" onclick="updateResource()">Update</button>
+                    </div>
+                </div>
+                <button type="button" class="danger" onclick="deleteResource()">Delete by ID</button>
+                <button type="button" class="secondary" onclick="loadResources()">Refresh</button>
+            </form>
+            <pre id="resourceOutput">[]</pre>
+        </section>
+
+        <section class="card">
+            <h2>Consumption Records</h2>
+            <div class="endpoint">GET/POST/PUT/DELETE /api/consumption-records</div>
+            <form id="consumptionForm">
+                <label>Resource ID</label><input id="consumptionResourceId" type="number" min="1" required>
+                <label>Consumption Value</label><input id="consumptionValue" type="number" min="0.01" step="0.01" required>
+                <label>Date</label><input id="consumptionDate" type="date" required>
+                <label>Campus Location</label><input id="campusLocation" required value="Main Campus">
+                <div class="row">
+                    <div><label>Update/Delete ID</label><input id="recordId" type="number" min="1"></div>
+                    <div style="align-self:end">
+                        <button type="submit">Create</button>
+                        <button type="button" class="secondary" onclick="updateConsumption()">Update</button>
+                    </div>
+                </div>
+                <button type="button" class="danger" onclick="deleteConsumption()">Delete by ID</button>
+                <button type="button" class="secondary" onclick="loadConsumption()">Refresh</button>
+            </form>
+            <pre id="consumptionOutput">[]</pre>
+        </section>
+
+        <section class="card">
+            <h2>Sustainability Metrics</h2>
+            <div class="endpoint">GET/POST/PUT/DELETE /api/sustainability-metrics</div>
+            <form id="metricForm">
+                <label>Metric Name</label><input id="metricName" required>
+                <label>Metric Value</label><input id="metricValue" type="number" min="0.01" step="0.01" required>
+                <label>Unit</label><input id="metricUnit" required value="Percent">
+                <label>Date</label><input id="metricDate" type="date" required>
+                <label>Description</label><input id="metricDescription">
+                <div class="row">
+                    <div><label>Update/Delete ID</label><input id="metricId" type="number" min="1"></div>
+                    <div style="align-self:end">
+                        <button type="submit">Create</button>
+                        <button type="button" class="secondary" onclick="updateMetric()">Update</button>
+                    </div>
+                </div>
+                <button type="button" class="danger" onclick="deleteMetric()">Delete by ID</button>
+                <button type="button" class="secondary" onclick="loadMetrics()">Refresh</button>
+            </form>
+            <pre id="metricOutput">[]</pre>
+        </section>
+    </div>
+</div>
+<script>
+    const API = `${location.origin}${location.pathname.split('/servlet-demo.html')[0]}/api`;
+    const $ = (id) => document.getElementById(id);
+
+    async function request(path, options = {}) {
+        const response = await fetch(`${API}/${path}`, options);
+        const text = await response.text();
+        let data;
+        try { data = JSON.parse(text); } catch { data = {message:text}; }
+        if (!response.ok) throw new Error(data.message || `HTTP ${response.status}`);
+        return data;
+    }
+
+    const formBody = (obj) => new URLSearchParams(obj);
+
+    async function checkHealth() {
+        try {
+            await request('health');
+            $('status').textContent = 'RUNNING';
+            $('status').className = 'status ok';
+            await Promise.all([loadResources(), loadConsumption(), loadMetrics()]);
+        } catch (e) {
+            $('status').textContent = e.message;
+            $('status').className = 'status bad';
+        }
+    }
+
+    async function loadResources(){ const data=await request('resources'); $('resourceOutput').textContent=JSON.stringify(data,null,2); }
+    async function loadConsumption(){ const data=await request('consumption-records'); $('consumptionOutput').textContent=JSON.stringify(data,null,2); }
+    async function loadMetrics(){ const data=await request('sustainability-metrics'); $('metricOutput').textContent=JSON.stringify(data,null,2); }
+
+    $('resourceForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            const data = await request('resources',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formBody({
+                resourceName:$('resourceName').value,resourceType:$('resourceType').value,unit:$('resourceUnit').value,description:$('resourceDescription').value
+            })});
+            $('resourceOutput').textContent=JSON.stringify(data,null,2); await loadResources();
+        } catch(e){alert(e.message)}
+    });
+
+    async function updateResource(){
+        const id=$('resourceId').value;if(!id){alert('Enter a resource ID.');return}
+        try { const data=await request(`resources/${id}`,{method:'PUT',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formBody({resourceName:$('resourceName').value,resourceType:$('resourceType').value,unit:$('resourceUnit').value,description:$('resourceDescription').value})});$('resourceOutput').textContent=JSON.stringify(data,null,2);await loadResources(); }catch(e){alert(e.message)}
+    }
+    async function deleteResource(){ const id=$('resourceId').value;if(!id){alert('Enter a resource ID.');return} if(!confirm('Delete this resource? Related consumption records use ON DELETE CASCADE.'))return; try{const data=await request(`resources/${id}`,{method:'DELETE'});$('resourceOutput').textContent=JSON.stringify(data,null,2);await loadResources();await loadConsumption();}catch(e){alert(e.message)} }
+
+    $('consumptionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try { const data=await request('consumption-records',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formBody({resourceId:$('consumptionResourceId').value,consumptionValue:$('consumptionValue').value,consumptionDate:$('consumptionDate').value,campusLocation:$('campusLocation').value})});$('consumptionOutput').textContent=JSON.stringify(data,null,2);await loadConsumption(); }catch(e){alert(e.message)}
+    });
+    async function updateConsumption(){ const id=$('recordId').value;if(!id){alert('Enter a record ID.');return}try{const data=await request(`consumption-records/${id}`,{method:'PUT',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formBody({resourceId:$('consumptionResourceId').value,consumptionValue:$('consumptionValue').value,consumptionDate:$('consumptionDate').value,campusLocation:$('campusLocation').value})});$('consumptionOutput').textContent=JSON.stringify(data,null,2);await loadConsumption();}catch(e){alert(e.message)} }
+    async function deleteConsumption(){ const id=$('recordId').value;if(!id){alert('Enter a record ID.');return}if(!confirm('Delete this record?'))return;try{const data=await request(`consumption-records/${id}`,{method:'DELETE'});$('consumptionOutput').textContent=JSON.stringify(data,null,2);await loadConsumption();}catch(e){alert(e.message)} }
+
+    $('metricForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try { const data=await request('sustainability-metrics',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formBody({metricName:$('metricName').value,metricValue:$('metricValue').value,unit:$('metricUnit').value,metricDate:$('metricDate').value,description:$('metricDescription').value})});$('metricOutput').textContent=JSON.stringify(data,null,2);await loadMetrics(); }catch(e){alert(e.message)}
+    });
+    async function updateMetric(){ const id=$('metricId').value;if(!id){alert('Enter a metric ID.');return}try{const data=await request(`sustainability-metrics/${id}`,{method:'PUT',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formBody({metricName:$('metricName').value,metricValue:$('metricValue').value,unit:$('metricUnit').value,metricDate:$('metricDate').value,description:$('metricDescription').value})});$('metricOutput').textContent=JSON.stringify(data,null,2);await loadMetrics();}catch(e){alert(e.message)} }
+    async function deleteMetric(){ const id=$('metricId').value;if(!id){alert('Enter a metric ID.');return}if(!confirm('Delete this sustainability metric?'))return;try{const data=await request(`sustainability-metrics/${id}`,{method:'DELETE'});$('metricOutput').textContent=JSON.stringify(data,null,2);await loadMetrics();}catch(e){alert(e.message)} }
+
+    const today = new Date().toISOString().slice(0,10);
+    $('consumptionDate').value=today;
+    $('metricDate').value=today;
+    checkHealth();
+</script>
+</body>
+</html>
