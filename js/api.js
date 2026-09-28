@@ -1,10 +1,11 @@
 /* =========================================================
    GREEN CAMPUS DATABASE API CLIENT
-   Added without removing the previous validation/weather stages.
-   The Java API stores registration and report data in MySQL.
+   All Java backend requests go through Tomcat on port 8081.
    ========================================================= */
 
-const GREEN_CAMPUS_API = "http://localhost:8080/api";
+const GREEN_CAMPUS_API =
+    "http://localhost:8081/green-campus/api";
+
 
 async function postForm(endpoint, data) {
     const body = new URLSearchParams(data);
@@ -12,21 +13,34 @@ async function postForm(endpoint, data) {
     const response = await fetch(`${GREEN_CAMPUS_API}/${endpoint}`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            "Content-Type":
+                "application/x-www-form-urlencoded;charset=UTF-8"
         },
-        body
+        body: body
     });
 
-    const result = await response.json();
+    let result;
+
+    try {
+        result = await response.json();
+    } catch (error) {
+        throw new Error(
+            `Server returned an invalid response (HTTP ${response.status}).`
+        );
+    }
 
     if (!response.ok || !result.success) {
-        throw new Error(result.message || "The server request failed.");
+        throw new Error(
+            result.message || "The server request failed."
+        );
     }
 
     return result;
 }
 
+
 const GreenCampusAPI = {
+
     register(user) {
         return postForm("register", user);
     },
@@ -38,4 +52,5 @@ const GreenCampusAPI = {
     submitReport(report) {
         return postForm("report", report);
     }
+
 };
